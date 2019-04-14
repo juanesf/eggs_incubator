@@ -14,6 +14,8 @@ http://nicuflorica.blogspot.ro/
 http://arduinotehniq.blogspot.com/
 */
 
+//2019 mod by juanesf
+
 // http://tronixstuff.com/2011/03/16/tutorial-your-arduinos-inbuilt-eeprom/
 #include <EEPROM.h>
 
@@ -148,10 +150,10 @@ delay(3000);
 lcd.clear();
 
   lcd.setCursor(0,0);  
-  lcd.print("original sketch");
+  lcd.print("Mod sketch");
   
   lcd.setCursor(6,1);  
-  lcd.print("by niq_ro");
+  lcd.print("by juanesf");
 delay(3000);
 lcd.clear();
 
@@ -292,13 +294,16 @@ delay(500);
 if (Temp > tes) 
  {
  digitalWrite(heater, LOW);
- digitalWrite(extraction, HIGH); 
+ digitalWrite(extraction, HIGH);
+ digitalWrite(ventilation, HIGH);
    lcd.setCursor(0, 1);
    lcd.print("ALTO ");
  } 
 if (tes - dete > Temp)
   {
-   digitalWrite(heater, HIGH); 
+   digitalWrite(heater, HIGH);
+   digitalWrite(extraction, LOW);
+   digitalWrite(ventilation, LOW);
    lcd.setCursor(0, 1);
    lcd.print("BAJO");
  } 
@@ -309,18 +314,22 @@ if ((Temp <= tes) and (tes - dete <= Temp))
  } 
 
 
- if (Hum > hass) 
+ if (Hum > hass)
  {
- digitalWrite(humidifier, HIGH); 
+ digitalWrite(humidifier, LOW);
+ digitalWrite(extraction, HIGH);
+ digitalWrite(ventilation, HIGH);
    lcd.setCursor(10, 1);
    lcd.print("ALTO ");
- } 
- if (Hum < hass - dehas) 
+ }
+ if (Hum < hass - dehas)
  {
-   digitalWrite(humidifier, LOW); 
+   digitalWrite(humidifier, HIGH);
+   digitalWrite(extraction, LOW);
+   digitalWrite(ventilation, LOW); 
    lcd.setCursor(10, 1);
    lcd.print("BAJO");
- } 
+ }
  if ((Hum <= hass) and (Hum >= hass - dehas))
  {  lcd.setCursor(10, 1);
    lcd.print("OK !  ");
@@ -332,7 +341,7 @@ if ((actual - lastPress > timeBacklight) &&  (valBacklight > minBacklight))  // 
   valBacklight = valBacklight - valStep;   // nivel aprindere in scadere
   if (valBacklight < minBacklight) valBacklight = minBacklight; // nu trebuie sa scada valaorea sub minim
   analogWrite(backlight, valBacklight);
-  Serial.println(valBacklight);
+  lcd.print(valBacklight);
 }
 } // last line for MENU = 0
 
