@@ -118,6 +118,9 @@ lcd.createChar(0, grad);
 // Initialize DHT sensor
   dht.begin();
 
+// Initialize Monitor Serial  
+  Serial.begin(115200);
+
 // define outputs
  pinMode(heater, OUTPUT);  
  pinMode(humidifier, OUTPUT);
@@ -146,7 +149,7 @@ lcd.createChar(0, grad);
   lcd.setCursor(0,1);  
   lcd.print("humidity control");
 
-delay(3000);
+delay(1500);
 lcd.clear();
 
   lcd.setCursor(0,0);  
@@ -154,7 +157,7 @@ lcd.clear();
   
   lcd.setCursor(6,1);  
   lcd.print("by juanesf");
-delay(3000);
+delay(1500);
 lcd.clear();
 
 /*
@@ -236,6 +239,7 @@ lcd_key = read_LCD_buttons();  // read the buttons
 
  Temp = dht.readTemperature(); 
 // int Temp = dht.readTemperature(); 
+ Serial.println(Temp);
 
 delay(500);
 
@@ -296,21 +300,26 @@ if (Temp > tes)
  digitalWrite(heater, LOW);
  digitalWrite(extraction, HIGH);
  digitalWrite(ventilation, HIGH);
-   lcd.setCursor(0, 1);
+ lcd.setCursor(0, 1);
    lcd.print("ALTO ");
+   Serial.println("Temp HIGH");
  } 
 if (tes - dete > Temp)
   {
    digitalWrite(heater, HIGH);
-   digitalWrite(extraction, LOW);
-   digitalWrite(ventilation, LOW);
+   digitalWrite(ventilation, HIGH);
    lcd.setCursor(0, 1);
    lcd.print("BAJO");
+   Serial.println("Temp LOW");
  } 
 if ((Temp <= tes) and (tes - dete <= Temp))
  {
+   digitalWrite(extraction, LOW);
+   digitalWrite(ventilation, LOW);
+   digitalWrite(heater, LOW);
    lcd.setCursor(0, 1);
    lcd.print("OK !  ");
+   Serial.println("Temp OK");
  } 
 
 
@@ -324,14 +333,15 @@ if ((Temp <= tes) and (tes - dete <= Temp))
  }
  if (Hum < hass - dehas)
  {
-   digitalWrite(humidifier, HIGH);
-   digitalWrite(extraction, LOW);
-   digitalWrite(ventilation, LOW); 
+   digitalWrite(humidifier, HIGH); 
    lcd.setCursor(10, 1);
    lcd.print("BAJO");
  }
  if ((Hum <= hass) and (Hum >= hass - dehas))
- {  lcd.setCursor(10, 1);
+ {  
+   digitalWrite(extraction, LOW);
+   digitalWrite(ventilation, LOW);
+   lcd.setCursor(10, 1);
    lcd.print("OK !  ");
 }
 
