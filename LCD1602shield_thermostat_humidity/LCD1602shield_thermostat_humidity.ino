@@ -240,6 +240,7 @@ lcd_key = read_LCD_buttons();  // read the buttons
  Temp = dht.readTemperature(); 
 // int Temp = dht.readTemperature(); 
  Serial.println(Temp);
+ Serial.println(Hum);
 
 delay(500);
 
@@ -330,19 +331,23 @@ if ((Temp <= tes) and (tes - dete <= Temp))
  digitalWrite(ventilation, HIGH);
    lcd.setCursor(10, 1);
    lcd.print("ALTO ");
+   Serial.println("Hum HIGH");
  }
  if (Hum < hass - dehas)
  {
    digitalWrite(humidifier, HIGH); 
    lcd.setCursor(10, 1);
    lcd.print("BAJO");
+   Serial.println("Hum LOW");
  }
  if ((Hum <= hass) and (Hum >= hass - dehas))
  {  
+   digitalWrite(humidifier, LOW);
    digitalWrite(extraction, LOW);
    digitalWrite(ventilation, LOW);
    lcd.setCursor(10, 1);
    lcd.print("OK !  ");
+   Serial.println("Hum OK");
 }
 
 actual = millis()/1000;
